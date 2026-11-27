@@ -1,0 +1,36 @@
+Sub ListWorkbookNames()
+
+'Intention is to list down hundreds workbooks name while being stored in same subfolder
+
+Dim folderPath As String
+Dim fileName As String
+Dim ws As Worksheet
+Dim row As Long
+
+' Set your folder path here (change as needed)
+folderPath = "C:\Subfolder\"
+
+' Check for trailing backslash
+If Right(folderPath, 1) <> "\" Then
+folderPath = folderPath & "\"
+End If
+
+' Create a new worksheet
+Set ws = ThisWorkbook.Sheets.Add
+ws.Name = "WorkbookList"
+ws.Cells(1, 1).Value = "File Name"
+row = 2
+
+' Get the first Excel file in the folder
+fileName = Dir(folderPath & "*.xls*")
+
+' Loop through all Excel files
+Do While fileName <> ""
+  ws.Cells(row, 1).Value = fileName
+  row = row + 1
+  fileName = Dir
+Loop
+
+MsgBox "File names listed in '" & ws.Name & "'.", vbInformation
+
+End Sub
