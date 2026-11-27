@@ -1,0 +1,40 @@
+Sub ExportPictures()
+
+Dim ws As Worksheet
+Dim shp As Shape
+Dim folderPath As String
+Dim fileName As String
+Dim picIndex As Long
+
+folderPath = ThisWorkbook.Path & "\ExportedImages\"
+
+If Dir(folderPath, vbDirectory) = "" Then MkDir folderPath
+For Each ws In ThisWorkbook.Sheets
+  picIndex = 1
+  For Each shp In ws.Shapes
+    If shp.Type = msoPicture Then
+      fileName = folderPath & ws.Name & "_Pic" & picIndex & ".png"
+    ' Copy the image
+    shp.CopyPicture Appearance:=xlScreen, Format:=xlPicture
+
+    ' Set temporary holder
+    Dim chartObj As ChartObject
+    Set chartObj = ws.ChartObjects.Add(0, 0, shp.Width, shp.Height)
+
+    ' Paste with PasteSpecial
+    chartObj.Chart.ChartArea.Select
+    chartObj.Chart.Paste
+
+    ' Export PNG
+    chartObj.Chart.Export fileName, "PNG"
+    chartObj.Delete
+
+    picIndex = picIndex + 1
+
+  End If
+  Next shp
+Next ws
+
+MsgBox "PNG exported to" & folderPath
+
+End Sub
