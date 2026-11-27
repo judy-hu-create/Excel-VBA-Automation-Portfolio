@@ -2,7 +2,6 @@ Private Sub Worksheet_SelectionChange(ByVal Target As Range)
 
 'Intention is to have selected Row to be highlighted in Yellow for better readibility in the workbook with hundreds of data
 
-
 Dim selectedRow As Long
 Dim lastColumn As Long
 Dim yellowColor As Long
