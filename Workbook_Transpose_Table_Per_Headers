@@ -1,0 +1,28 @@
+=LET(
+headers, B2:B6000,
+data, C2:6000,
+flags, IF(TRIM(data)="CompanyProprietary", 1, 0),
+grp, SCAN(0, flags, LAMBDA(a,b, a + b)),
+maxGrp, MAX(grp),
+allHeaders, UNIQUE(FILTER(headers, headers <> "")),
+numCols, COUNTA(allHeaders),
+MAKEARRAY(
+  maxGrp + 1, numCols,
+  LAMBDA(r,c,
+    LET(
+      headerName, INDEX(allHeaders, c),
+      IF(
+        r = 1,
+        headerName,
+        LET(
+          currentGroup, r -1,
+          groupHeaders, FILTER(headers, grp = currentGroup),
+          groupData, FILTER(data, grp = currentGroup),
+          matchIndex, XMATCH(headerName, groupHeaders, 0),
+          IF(ISNUMBER(matchIndex), INDEX(groupData, matchIndex), "There is no data for this property")
+          )
+        )
+      )
+    )
+  )
+)
