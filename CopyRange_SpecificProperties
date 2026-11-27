@@ -1,0 +1,99 @@
+Sub CopyRange_SpecificProperties()
+
+'Intention is to extract Company Proprietary Attribute from specific worksheet
+
+Application.ScreenUpdating = False
+
+Dim desWS As Worksheet
+Dim srcWB As Workbook
+Dim srcWS As Worksheet
+Dim LastRow As Long
+Dim i As Long
+Dim NextRow As Long
+Dim strExtension As String
+
+Const strPath As String = "C:\subfolder\"
+
+Set desWS = ThisWorkbook.Sheets("Master2")
+
+ChDir strPath
+strExtension = Dir(strPath & "*CompanyProprietaryVariants*.xls*")
+
+Do While strExtension <> ""
+
+  Set srcWB = Workbooks.Open(strPath & strExtension)
+  Set srcWS = srcWB.Sheets("CompanyProprietary")
+
+  LastRow = srcWS.Cells(srcWS.Rows.Count, "B").End(xlUp).Row
+
+For i = 2 To LastRow
+  If srcWS.Cells(i, "B").Value Like "*CompanyProprietaryAttribute1*" Then
+    NextRow = desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Row + 1
+
+    desWS.Cells(NextRow, "A").Value = srcWS.Cells(i, "B").Value
+    desWS.Cells(NextRow, "B").Value = srcWS.Cells(i, "C").Value
+End If
+Next i
+
+For i = 2 To LastRow
+If srcWS.Cells(i, "B").Value Like "*CompanyProprietaryAttribute2*" Then
+NextRow = desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Row + 1
+desWS.Cells(NextRow, "A").Value = srcWS.Cells(i, "B").Value
+desWS.Cells(NextRow, "B").Value = srcWS.Cells(i, "C").Value
+End If
+Next i
+
+For i = 2 To LastRow
+  If srcWS.Cells(i, "B").Value Like "*CompanyProprietaryAttribute3*" Then
+    NextRow = desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Row +1
+
+    desWS.Cells(NextRow, "A").Value = srcWS.Cells(i, "B").Value
+    desWS.Cells(NextRow, "B").Value = srcWS.Cells(i, "C").Value
+  End If
+Next i
+
+For i = 2 To LastRow
+  If srcWS.Cells(i, "B").Value Like "*CompanyProprietaryAttribute4*" Then
+    NextRow = desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Row + 1
+
+desWS.Cells(NextRow, "A").Value = srcWS.Cells(i, "B").Value
+desWS.Cells(NextRow, "B").Value = srcWS.Cells(i, "C").Value
+
+  End If
+Next i
+
+For i = 2 To LastRow
+  If srcWS.Cells(i, "B").Value Like "*CompanyProprietaryAttribute5*" Then
+    NextRow = desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Row + 1
+
+    desWS.Cells(NextRow, "A").Value = srcWS.Cells(i, "B").Value
+    desWS.Cells(NextRow, "B").Value = srcWS.Cells(i, "C").Value
+  End If
+Next i
+
+For i = 2 To LastRow
+  If srcWS.Cells(i, "B").Value Like "*CompanyProprietaryAttribute6*" Then
+    NextRow = desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Row + 1
+
+    desWS.Cells(NextRow, "A").Value = srcWS.Cells(i, "B").Value
+    desWS.Cells(NextRow, "B").Value = srcWS.Cells(i, "C").Value
+  End If
+Next i
+
+For i = 2 To LastRow
+If srcWS.Cells(i, "B").Value Like "*CompanyProprietaryAttribute7*" Then
+  NextRow = desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Row + 1
+
+  desWS.Cells(NextRow, "A").Value = srcWS.Cells(i, "B").Value
+  desWS.Cells(NextRow, "B").Value = srcWS.Cells(i, "C").Value
+  End If
+Next i
+
+srcWB.Close False
+strExtension = Dir
+
+Loop
+
+Application.ScreenUpdating = True
+
+End Sub
