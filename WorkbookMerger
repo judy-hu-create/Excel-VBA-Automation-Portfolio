@@ -11,7 +11,7 @@ Set desWS = ThisWorkbook.Sheets("Master")
 
 Dim LastRow As Long
 
-Const strPath As String = "C:\Users\EmployeeID\Downloads\Subfolder\"
+Const strPath As String = "C:\Subfolder\"
 ChDir strPath
 strExtension = Dir(strPath & "*.xlsx")
 
