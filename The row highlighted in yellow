@@ -1,0 +1,28 @@
+Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+
+'Intention is to have selected Row to be highlighted in Yellow for better readibility in the workbook with hundreds of data
+
+
+Dim selectedRow As Long
+Dim lastColumn As Long
+Dim yellowColor As Long
+
+' Define RGB colors
+yellowColor = RGB(255, 255, 0) ' Yellow color
+
+' Check if a single row is selected
+If Target.Rows.Count = 1 Then
+  selectedRow = Target.Row
+  lastColumn = Cells(selectedRow, Columns.Count).End(xlToLeft).Column
+
+  ' Clear previous formatting in the entire sheet
+  Cells.Interior.ColorIndex = xlNone
+  Cells.Font.ColorIndex = xlAutomatic
+
+  ' Highlight the selected row with yellow color
+  Range(Cells(selectedRow, 1), Cells(selectedRow, lastColumn)).Interior.Color = yellowColor
+  Range(Cells(selectedRow, 1), Cells(selectedRow, lastColumn)).Font.Color = RGB(0, 0, 0) ' Black font color
+
+End If
+
+End Sub
