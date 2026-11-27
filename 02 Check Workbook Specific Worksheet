@@ -1,5 +1,9 @@
 Sub ExportPictures()
 
+'Following by 01 Check Workbook Specific Worksheet
+'Intention is to export PNG from specific worksheet
+
+
 Dim ws As Worksheet
 Dim shp As Shape
 Dim folderPath As String
