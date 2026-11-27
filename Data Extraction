@@ -1,0 +1,36 @@
+Sub CopyRange()
+
+'Intention is to extract information of specific worksheet from hundreds of workbooks
+
+Application.ScreenUpdating = False
+
+Dim desWS As Worksheet
+Dim srcWB As Workbook
+
+Set desWS = ThisWorkbook.Sheets("Master")
+
+Dim LastRow As Long
+
+Const strPath As String = "C:\Users\EmployeeID\Downloads\Subfolder\"
+ChDir strPath
+strExtension = Dir(strPath & "*.xlsx")
+
+Do While strExtension <> ""
+
+Set srcWB = Workbooks.Open(strPath & strExtension)
+
+With srcWB.Sheets("CompanyProprietary")
+LastRow = .Cells.Find("*", SearchOrder:=xlByRows, SearchDirection:=xlPrevious).Row
+.Range("B2:C" & LastRow).Copy desWS.Cells(desWS.Rows.Count, "A").End(xlUp).Offset(1, 0)
+
+End With
+
+srcWB.Close False
+
+strExtension = Dir
+
+Loop
+
+Application.ScreenUpdating = True
+
+End Sub
