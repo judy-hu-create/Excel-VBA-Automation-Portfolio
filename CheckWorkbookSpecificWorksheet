@@ -1,0 +1,94 @@
+Sub CheckCompanyProprietaryDrawingIfExistInFolder()
+
+' Intention is to check if Specific worksheet exists in a workbook
+
+Application.ScreenUpdating = False
+
+Dim wb As Workbook
+Dim ws As Worksheet
+Dim folderPath As String
+Dim fileName As String
+Dim found As Boolean
+Dim resultRow As Long
+Dim reportSheet As Worksheet
+
+' Set your folder path here
+folderPath = "C:\subfolder\"
+
+' Create a new sheet for results
+On Error Resume Next
+Set reportSheet = ThisWorkbook.Sheets("CheckResults")
+If reportSheet Is Nothing Then
+  Set reportSheet = ThisWorkbook.Sheets.Add
+  reportSheet.Name = "CheckResults"
+End If
+On Error GoTo 0
+
+' Clear old results
+reportSheet.Cells.Clear
+reportSheet.Range("A1:B1").Value = Array("File Name", "CompanyProprietaryDrawings Exists?")
+resultRow = 2
+
+' Get first file in folder
+fileName = Dir(folderPath & "*CompanyProprietaryVariants*.xls*")
+
+' Loop through all Excel files
+Do While fileName <> ""
+  found = False
+  Set wb = Workbooks.Open(folderPath & fileName)
+
+' Check each sheet
+For Each ws In wb.Sheets
+  If ws.Name = "CompanyProprietaryDrawings" Then
+    found = True
+  Exit For
+  End If
+Next ws
+
+  ' Write result into report sheet
+  reportSheet.Cells(resultRow, 1).Value = fileName
+  If found Then
+    reportSheet.Cells(resultRow, 2).Value = "Yes"
+    ' Copy the entire Bonding Diagram sheet after CheckResults
+    wb.Sheets("Bonding Diagram").Copy After:=reportSheet
+
+' Reference the newly copied sheet
+
+Dim newSheet As Worksheet
+
+Set newSheet = reportSheet.Next
+
+' Build the new name using the full filename (without extension)
+
+Dim baseName As String
+baseName = fileName
+
+If InStrRev(baseName, ".") > 0 Then
+  baseName = Left(baseName, InStrRev(baseName, ".") -1)
+End If
+
+' Assign the new name
+On Error Resume Next
+newSheet.Name = "BD_" & baseName
+If Err.Number <> 0 Then
+  ' Fallback if name is invalid or too long
+  newSheet.Name = "BD_" & resultRow
+  Err.Clear
+End If
+On Error GoTo 0
+
+  Else
+    reportSheet.Cells(resultRow, 2).Value = "No"
+  End If
+
+  resultRow = resultRow + 1
+
+  wb.Close SaveChanges:=False
+  fileName = Dir
+Loop
+
+MsgBox "Check complete. See 'CheckResults' sheet for details."
+
+Application.ScreenUpdating = True
+
+End Sub
